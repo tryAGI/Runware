@@ -1,0 +1,220 @@
+openapi: 3.0.3
+info:
+  title: Runware API
+  description: |
+    Runware task API for AI media generation. This SDK includes the shared
+    task endpoint and structured fields for 3D inference with Meta SAM 3D
+    Objects (`meta:sam@3d`).
+
+    This OpenAPI document is manually maintained from Runware's public API
+    documentation because Runware does not publish a downloadable OpenAPI
+    document.
+  version: "1.0.0"
+servers:
+  - url: https://api.runware.ai
+security:
+  - BearerAuth: []
+tags:
+  - name: tasks
+paths:
+  /v1:
+    post:
+      operationId: runTasks
+      summary: Run one or more Runware tasks
+      description: |
+        Runware's REST API accepts a JSON array where each item is a task.
+        This endpoint supports authentication by Bearer header; payload-based
+        authentication can also be represented by adding an authentication task
+        as the first item in the request array.
+      tags: [tasks]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/RunwareTask"
+      responses:
+        "200":
+          description: Task results or task acknowledgments
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RunwareResponse"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    RunwareTask:
+      type: object
+      description: |
+        Generic Runware task object. Common platform fields are modeled
+        directly, and additional task-specific properties are allowed so newer
+        Runware task types can be used before this spec is updated.
+      additionalProperties: true
+      required: [taskType]
+      properties:
+        taskType:
+          type: string
+          description: Task identifier, such as authentication, 3dInference, getResponse, or getTaskDetails.
+        apiKey:
+          type: string
+          description: API key for payload-based authentication tasks.
+        taskUUID:
+          type: string
+          format: uuid
+          description: UUID v4 used to track and match task responses.
+        model:
+          type: string
+          description: Model identifier. Use meta:sam@3d for Meta SAM 3D Objects.
+        outputType:
+          type: string
+          default: URL
+          enum: [URL]
+          description: 3D output type.
+        outputFormat:
+          type: string
+          default: GLB
+          enum: [GLB]
+          description: Generated 3D model file format.
+        webhookURL:
+          type: string
+          format: uri
+          description: URL where completed task responses should be POSTed.
+        deliveryMethod:
+          type: string
+          default: async
+          enum: [sync, async]
+          description: Whether to return completed results directly or acknowledge and poll later.
+        uploadEndpoint:
+          type: string
+          format: uri
+          description: Presigned upload URL for generated content.
+        ttl:
+          type: integer
+          format: int32
+          minimum: 60
+          description: Time-to-live in seconds for generated URL output.
+        includeCost:
+          type: boolean
+          default: false
+          description: Include task cost in responses.
+        numberResults:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 4
+          default: 1
+          description: Number of generated results.
+        inputs:
+          $ref: "#/components/schemas/RunwareInputs"
+        positivePrompt:
+          type: string
+          description: Text prompt describing elements to include in generated output.
+        seed:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Random seed for reproducible generation.
+    RunwareInputs:
+      type: object
+      additionalProperties: true
+      properties:
+        image:
+          type: string
+          description: Image input as UUID, URL, Data URI, or Base64.
+        mask:
+          type: string
+          description: Mask image as UUID, URL, Data URI, or Base64.
+    RunwareResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/RunwareTaskResponse"
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/RunwareError"
+        error:
+          type: string
+          description: Legacy single-error field used by some responses.
+    RunwareTaskResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        taskType:
+          type: string
+        taskUUID:
+          type: string
+          format: uuid
+        connectionSessionUUID:
+          type: string
+          format: uuid
+        seed:
+          type: integer
+          format: int64
+        cost:
+          type: number
+          format: double
+        modelUUID:
+          type: string
+          format: uuid
+        modelURL:
+          type: string
+          format: uri
+        modelBase64Data:
+          type: string
+        modelDataURI:
+          type: string
+        outputs:
+          $ref: "#/components/schemas/RunwareOutputs"
+        request:
+          type: array
+          items:
+            $ref: "#/components/schemas/RunwareTask"
+        response:
+          type: object
+          additionalProperties: true
+    RunwareOutputs:
+      type: object
+      additionalProperties: true
+      properties:
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/RunwareOutputFile"
+    RunwareOutputFile:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+    RunwareError:
+      type: object
+      additionalProperties: true
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        parameter:
+          type: string
+        type:
+          type: string
+        documentation:
+          type: string
+          format: uri
+        taskUUID:
+          type: string
+          format: uuid
+        taskType:
+          type: string
