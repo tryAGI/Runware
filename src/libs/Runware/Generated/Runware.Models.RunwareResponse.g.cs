@@ -59,5 +59,6 @@ namespace Runware
         public RunwareResponse()
         {
         }
+
     }
 }

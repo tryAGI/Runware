@@ -138,5 +138,6 @@ namespace Runware
         public RunwareTaskResponse()
         {
         }
+
     }
 }
