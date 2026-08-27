@@ -4,18 +4,18 @@
 namespace Runware
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class RunwareOutputFile
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("uuid")]
         public global::System.Guid? Uuid { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("url")]
         public string? Url { get; set; }

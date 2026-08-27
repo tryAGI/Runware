@@ -10,11 +10,11 @@ namespace Runware
     public enum RunwareTaskDeliveryMethod
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Async,
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Sync,
     }

@@ -4,18 +4,18 @@
 namespace Runware
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class RunwareResponse
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("data")]
         public global::System.Collections.Generic.IList<global::Runware.RunwareTaskResponse>? Data { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("errors")]
         public global::System.Collections.Generic.IList<global::Runware.RunwareError>? Errors { get; set; }

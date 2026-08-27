@@ -4,7 +4,7 @@
 namespace Runware
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class RunwareTaskResponseResponse
     {

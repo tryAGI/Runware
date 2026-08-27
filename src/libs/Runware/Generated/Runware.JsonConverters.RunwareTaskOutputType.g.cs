@@ -20,7 +20,7 @@ namespace Runware.JsonConverters
                     {
                         return global::Runware.RunwareTaskOutputTypeExtensions.ToEnum(stringValue) ?? default;
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:
