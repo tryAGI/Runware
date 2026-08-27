@@ -10,7 +10,7 @@ namespace Runware
     public enum RunwareTaskOutputType
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Url,
     }

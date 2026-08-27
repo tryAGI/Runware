@@ -10,7 +10,7 @@ namespace Runware
     public enum RunwareTaskOutputFormat
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         Glb,
     }

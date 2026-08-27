@@ -92,7 +92,7 @@ namespace Runware
         public int? NumberResults { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [global::System.Text.Json.Serialization.JsonPropertyName("inputs")]
         public global::Runware.RunwareInputs? Inputs { get; set; }
